@@ -9,8 +9,6 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization) apply false
 }
 
-ext {
-    appCompileSdkVersion = 36
-    appTargetSdkVersion = 35
-    appMinSdkVersion = 27
-}
+extra["appCompileSdkVersion"] = 36
+extra["appTargetSdkVersion"] = 35
+extra["appMinSdkVersion"] = 27

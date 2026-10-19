@@ -4,51 +4,57 @@ plugins {
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.org.jetbrains.kotlin.plugin.compose)
     alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
-    id('kotlin-parcelize')
+    id("kotlin-parcelize")
 }
+
 hilt {
     enableAggregatingTask = true
 }
 
 android {
-    namespace 'com.trizon.mius'
-    compileSdk 36
+    namespace = "com.trizon.mius"
+    compileSdk = 36
 
     defaultConfig {
-        applicationId "com.trizon.mius"
-        minSdk 27
-        targetSdk 35
-        versionCode 1
-        versionName "1.0"
+        applicationId = "com.trizon.mius"
+        minSdk = 27
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
-            useSupportLibrary true
+            useSupportLibrary = true
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
+    
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+    
     buildFeatures {
-        compose true
+        compose = true
     }
-    packagingOptions {
+    
+    packaging {
         resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 }
 
 dependencies {
-
     implementation(libs.kotlin.stdlib)
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -69,7 +75,7 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
 
     implementation(libs.material)
-    implementation libs.androidx.viewpager2
+    implementation(libs.androidx.viewpager2)
 
     implementation(libs.constraintlayout)
 
@@ -93,9 +99,9 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
 
-    implementation libs.androidx.hilt.navigation.compose
-    implementation libs.androidx.navigation.compose
-    implementation libs.kotlinx.serialization.json
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
@@ -106,5 +112,4 @@ dependencies {
     // implementation(libs.firebase)
     // implementation(libs.analytics)
     // implementation(libs.crashlytics)
-
 }
