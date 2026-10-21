@@ -14,6 +14,13 @@ hilt {
 android {
     namespace = "com.trizon.todoro"
     compileSdk = 36
+    
+    applicationVariants.all {
+        val variant = this
+        outputs.all {
+            val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            output.outputFileName = "Todoro-${variant.versionName}-${variant.name}.apk"
+        }
 
     defaultConfig {
         applicationId = "com.trizon.todoro"
@@ -21,16 +28,18 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
+        
+        ndk {
+            abiFilters.addAll(setOf("armeabi-v7a", "arm64-v8a"))
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
         debug {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -109,7 +118,4 @@ dependencies {
     implementation(libs.glide)
     ksp(libs.ksp)
 
-    // implementation(libs.firebase)
-    // implementation(libs.analytics)
-    // implementation(libs.crashlytics)
 }

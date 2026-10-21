@@ -10,10 +10,11 @@ Intends to be relaxing and aesthetic
 Written in Kotlin
 
 ### Progress
-- [x] Idea & Plan
-- [x] Name & ID
-- [ ] Signing
-- [ ] App
+- [x] APK Signing
+- [x] App
+- [ ] Clean Up
+- [ ] Migration
+- [ ] Getting to work
 
 ### Note
-- Currently not working
+- Currently working but not viable

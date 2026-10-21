@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build & Sign Release APK
+    name: Build Release
     runs-on: ubuntu-latest
 
     steps:
@@ -30,10 +30,10 @@ jobs:
       - name: Grant Permission
         run: chmod +x gradlew
 
-      - name: Build Unsigned Release APK
+      - name: Build Unsigned APK
         run: ./gradlew assembleRelease
 
-      - name: Sign Android release 2
+      - name: Sign APK
         uses: ilharp/sign-android-release@v2.0.0
         id: sign_app
         with:
@@ -43,8 +43,8 @@ jobs:
           keyStorePassword: ${{ secrets.STORE_PASS }}
           keyPassword: ${{ secrets.KEY_PASS }}
 
-      - name: Upload Signed Release APK
+      - name: Upload Signed APK
         uses: actions/upload-artifact@v7
         with:
-          name: Release-Signed
+          name: Release
           path: ${{ steps.sign_app.outputs.signedFile }}
