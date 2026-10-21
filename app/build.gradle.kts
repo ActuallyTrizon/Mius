@@ -21,6 +21,7 @@ android {
             val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
             output.outputFileName = "Todoro-${variant.versionName}-${variant.name}.apk"
         }
+    }   
 
     defaultConfig {
         applicationId = "com.trizon.todoro"
@@ -115,7 +116,5 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
 
-    implementation(libs.glide)
-    ksp(libs.ksp)
 
 }
