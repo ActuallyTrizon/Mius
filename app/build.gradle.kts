@@ -12,11 +12,11 @@ hilt {
 }
 
 android {
-    namespace = "com.trizon.mius"
+    namespace = "com.trizon.todoro"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.trizon.mius"
+        applicationId = "com.trizon.todoro"
         minSdk = 27
         targetSdk = 35
         versionCode = 1

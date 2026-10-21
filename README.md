@@ -1,6 +1,17 @@
-### Mius
-Mius is a UI demo
+## Todoro
+Todoro is an countdowm timer & pomodoro tracker
 
-I am currently trying to get into software development.
+Remind yourself about your goal and don't miss the day
 
-So this is a test app.
+Productivity assistance for you
+
+Intends to be relaxing and aesthetic
+
+Written in Kotlin
+
+### Progress
+- [x] Idea & Plan
+- [ ] App
+
+### Note
+- Currently not working
