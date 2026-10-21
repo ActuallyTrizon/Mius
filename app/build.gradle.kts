@@ -14,14 +14,6 @@ hilt {
 android {
     namespace = "com.trizon.todoro"
     compileSdk = 36
-    
-    applicationVariants.all {
-        val variant = this
-        outputs.all {
-            val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
-            output.outputFileName = "Todoro-${variant.versionName}-${variant.name}.apk"
-        }
-    }   
 
     defaultConfig {
         applicationId = "com.trizon.todoro"
@@ -33,8 +25,6 @@ android {
         ndk {
             abiFilters.addAll(setOf("armeabi-v7a", "arm64-v8a"))
         }
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -60,6 +50,18 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.outputs.forEach { output ->
+            output.outputFileName.set(
+                variant.versionName.map { versionName ->
+                    "Todoro-$versionName-${variant.name}.apk"
+                }
+            )
         }
     }
 }
@@ -115,6 +117,4 @@ dependencies {
 
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
-
-
 }
