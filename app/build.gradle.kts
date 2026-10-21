@@ -14,19 +14,6 @@ hilt {
 android {
     namespace = "com.trizon.todoro"
     compileSdk = 36
-    
-    signingConfigs {
-        create("release") {
-            val storeFilePath = System.getenv("Sign_file") ?: "release.jks"
-            val jksFile = file(storeFilePath)
-            if (jksFile.exists()) {
-                storeFile = jksFile
-                storePassword = System.getenv("Store_pass")
-                keyAlias = System.getenv("Sign_alias")
-                keyPassword = System.getenv("Key_pass")
-            }
-        }
-    }
 
     defaultConfig {
         applicationId = "com.trizon.todoro"
@@ -42,7 +29,7 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
