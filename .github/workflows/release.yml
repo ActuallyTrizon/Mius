@@ -32,14 +32,14 @@ jobs:
         
       - name: Decode Keystore
         run: |
-          echo "${{ secrets.Keystore }}" | base64 --decode > app/release.jks
+          echo "${{ secrets.KEYSTORE }}" | base64 --decode > app/release.jks
 
       - name: Build Signed Release APK
         env:
           Sign_file: app/release.jks
-          Store_pass: ${{ secrets.Store_pass }}
-          Sign_alias: ${{ secrets.Sign_alias }}
-          Key_pass: ${{ secrets.Key_pass }}
+          Store_pass: ${{ secrets.STORE_PASS }}
+          Sign_alias: ${{ secrets.SIGN_ALIAS }}
+          Key_pass: ${{ secrets.KEY_PASS }}
         run: ./gradlew assembleRelease
 
       - name: Upload Release APK
