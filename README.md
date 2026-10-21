@@ -11,6 +11,8 @@ Written in Kotlin
 
 ### Progress
 - [x] Idea & Plan
+- [x] Name & ID
+- [ ] Signing
 - [ ] App
 
 ### Note
