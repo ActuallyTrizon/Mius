@@ -35,10 +35,11 @@ jobs:
 
       - name: Sign Android release 2
         uses: ilharp/sign-android-release@v2.0.0
+        id: sign_app
         with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.KEYSTORE }}
-          alias: ${{ secrets.SIGN_ALIAS }}
+          releaseDir: app/build/outputs/apk/release
+          signingKey: ${{ secrets.KEYSTORE }}
+          keyAlias: ${{ secrets.SIGN_ALIAS }}
           keyStorePassword: ${{ secrets.STORE_PASS }}
           keyPassword: ${{ secrets.KEY_PASS }}
 
