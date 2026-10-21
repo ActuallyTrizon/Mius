@@ -15,11 +15,10 @@ android {
     namespace = "com.trizon.todoro"
     compileSdk = 36
     
-    signingConfig {
+    signingConfigs {
         create("release") {
             val storeFilePath = System.getenv("Sign_file") ?: "release.jks"
             val jksFile = file(storeFilePath)
-            
             if (jksFile.exists()) {
                 storeFile = jksFile
                 storePassword = System.getenv("Store_pass")
