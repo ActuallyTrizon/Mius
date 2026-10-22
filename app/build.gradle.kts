@@ -54,18 +54,6 @@ android {
     }
 }
 
-androidComponents {
-    onVariants(selector().all()) { variant ->
-        variant.outputs.forEach { output ->
-            output.outputFileName.set(
-                variant.versionName.map { versionName ->
-                    "Todoro-$versionName-${variant.name}.apk"
-                }
-            )
-        }
-    }
-}
-
 dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.core.ktx)

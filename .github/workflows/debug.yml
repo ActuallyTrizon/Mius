@@ -33,8 +33,15 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
+      - name: Rename Debug APK
+        run: |
+          VERSION_NAME=$(grep -m1 'versionName' app/build.gradle.kts | cut -d'"' -f2)
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/*.apk dist/Todoro-$VERSION_NAME-debug.apk
+          echo "Renamed to dist/Todoro-$VERSION_NAME-debug.apk"
+
       - name: Upload Debug APK
         uses: actions/upload-artifact@v7
         with:
           name: Debug
-          path: app/build/outputs/apk/debug/*.apk
+          path: dist/*.apk

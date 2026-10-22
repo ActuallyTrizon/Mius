@@ -43,8 +43,17 @@ jobs:
           keyStorePassword: ${{ secrets.STORE_PASS }}
           keyPassword: ${{ secrets.KEY_PASS }}
 
+      - name: Rename Signed APK
+        run: |
+          VERSION_NAME=$(grep -m1 'versionName' app/build.gradle.kts | cut -d'"' -f2)
+          mkdir -p dist
+          SIGNED_FILE="${{ steps.sign_app.outputs.signedFile }}"
+          
+          cp "$SIGNED_FILE" "dist/Todoro-$VERSION_NAME-release.apk"
+          echo "Successfully packaged dist/Todoro-$VERSION_NAME-release.apk"
+
       - name: Upload Signed APK
         uses: actions/upload-artifact@v7
         with:
           name: Release
-          path: ${{ steps.sign_app.outputs.signedFile }}
+          path: dist/*.apk
