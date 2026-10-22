@@ -1,0 +1,100 @@
+name: Publish Release / Pre-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      workflow_type:
+        description: 'Select workflow type to publish'
+        required: true
+        type: choice
+        options:
+          - release
+          - debug
+        default: 'debug'
+      tag_name:
+        description: 'Release Tag (e.g., v1.0.0 or v1.0.0-rc1)'
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine Workflow File and Artifact Name
+        id: config
+        run: |
+          if [ "${{ inputs.workflow_type }}" = "release" ]; then
+            echo "workflow_file=release.yml" >> $GITHUB_OUTPUT
+            echo "artifact_name=Release" >> $GITHUB_OUTPUT
+            echo "prerelease=false" >> $GITHUB_OUTPUT
+          else
+            echo "workflow_file=debug.yml" >> $GITHUB_OUTPUT
+            echo "artifact_name=Debug" >> $GITHUB_OUTPUT
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Fetch Latest Successful Run Info
+        id: run-info
+        run: |
+          WORKFLOW_FILE="${{ steps.config.outputs.workflow_file }}"
+          ARTIFACT_NAME="${{ steps.config.outputs.artifact_name }}"
+          
+          echo "Finding latest successful run for $WORKFLOW_FILE..."
+          RUN_ID=$(gh run list --workflow="$WORKFLOW_FILE" --status=success --limit 1 --json databaseId --jq '.[0].databaseId')
+          
+          if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
+            echo "Error: No successful workflow runs found for $WORKFLOW_FILE"
+            exit 1
+          fi
+          
+          COMMIT_HASH=$(gh run view "$RUN_ID" --json headSha --jq '.headSha')
+          
+          echo "Found Run ID: $RUN_ID with Commit: $COMMIT_HASH"
+          echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+          echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
+
+      - name: Download Artifact
+        run: |
+          mkdir -p apk
+          gh run download "${{ steps.run-info.outputs.run_id }}" --name "${{ steps.config.outputs.artifact_name }}" --dir apk
+
+      - name: Locate APK file
+        id: find-apk
+        run: |
+          APK_PATH=$(find apk -name "*.apk" | head -n 1)
+          if [ -z "$APK_PATH" ]; then
+            echo "Error: No APK file found in the downloaded artifact."
+            exit 1
+          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
+          echo "Found APK at: $APK_PATH"
+
+      - name: Create GitHub Release and Upload Asset
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          IS_PRERELEASE="${{ steps.config.outputs.prerelease }}"
+          TAG="${{ inputs.tag_name }}"
+          COMMIT="${{ steps.run-info.outputs.commit_hash }}"
+          APK="${{ steps.find-apk.outputs.apk_path }}"
+          
+          EXTRA_FLAGS=""
+          if [ "$IS_PRERELEASE" = "true" ]; then
+            EXTRA_FLAGS="--prerelease"
+          fi
+
+          gh release create "$TAG" "$APK" \
+            --title "$TAG" \
+            --notes "Automated build from commit: $COMMIT" \
+            $EXTRA_FLAGS
