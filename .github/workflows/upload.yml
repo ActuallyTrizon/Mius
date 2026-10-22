@@ -1,4 +1,4 @@
-name: Publish Release / Pre-release
+name: Publish
 
 on:
   workflow_dispatch:
@@ -22,15 +22,12 @@ jobs:
     permissions:
       contents: write
       actions: read
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-
-      - name: Authenticate GitHub CLI
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Determine Workflow File and Artifact Name
         id: config
@@ -77,12 +74,11 @@ jobs:
           if [ -z "$APK_PATH" ]; then
             echo "Error: No APK file found in the downloaded artifact."
             exit 1
+          fi
           echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
           echo "Found APK at: $APK_PATH"
 
       - name: Create GitHub Release and Upload Asset
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           IS_PRERELEASE="${{ steps.config.outputs.prerelease }}"
           TAG="${{ inputs.tag_name }}"
