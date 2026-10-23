@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.trizon.todoro.navigation.Screen
 
 @Composable
@@ -15,7 +16,7 @@ fun MainScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
-    var timerText by remember { mutableStatePlaceholder("25:00") }
+    var timerText by remember { mutableStateOf("25:00") }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -57,7 +58,7 @@ fun MainScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "25:00",
+                        text = timerText, // 3. Hooked up the state variable
                         fontSize = 48.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
