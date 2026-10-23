@@ -5,9 +5,9 @@
 
 Todoro is an countdowm timer & pomodoro tracker
 
-Remind yourself about your goal and don't miss the day
+Remind yourself about your goal and don't miss the day or track time
 
-Productivity assistance for you
+Fun app for people wanting something new
 
 Intends to be relaxing and aesthetic
 
@@ -21,4 +21,9 @@ Written in Kotlin
 - [ ] Getting to work
 
 ### Note
-- Currently working but not viable
+- Currently working but not viable for daily driving
+
+This is my practice app
+
+### Building
+- W.I.P
