@@ -19,7 +19,6 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Idle)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    /** Single entry point for every user intent coming from [MainScreen]. */
     fun onEvent(event: HomeEvent) {
         when (event) {
             HomeEvent.LoadExamples -> loadExamples()

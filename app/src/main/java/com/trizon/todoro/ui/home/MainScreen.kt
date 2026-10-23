@@ -1,20 +1,12 @@
 package com.trizon.todoro.ui.home
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.trizon.todoro.navigation.Screen
 
@@ -23,29 +15,65 @@ fun MainScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var timerText by remember { mutableStatePlaceholder("25:00") }
 
-    LaunchedEffect(Unit) {
-        viewModel.onEvent(HomeEvent.LoadExamples)
-    }
-
-    Column(
+    Surface(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        color = MaterialTheme.colorScheme.background
     ) {
-        when (val state = uiState) {
-            HomeUiState.Idle -> Text(text = "Idle")
-            HomeUiState.Loading -> CircularProgressIndicator()
-            is HomeUiState.Success -> Text(text = "Loaded ${state.items.size} example item(s)")
-            is HomeUiState.Error -> Text(text = state.message)
-        }
-
-        Button(
-            modifier = Modifier.padding(top = 16.dp),
-            onClick = { navController.navigate(Screen.Detail(id = 123)) }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Go to Detail")
+            Text(
+                text = "Todoro",
+                fontSize = 36.sp,
+                color = MaterialTheme.colorScheme.primary
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Text(
+                text = "Countdown & Pomodoro Companion",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+            Card(
+                modifier = Modifier
+                    .size(200.dp),
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "25:00",
+                        fontSize = 48.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+            Button(
+                onClick = { 
+                    navController.navigate(Screen.Detail(id = 123)) 
+                },
+                modifier = Modifier.fillMaxWidth(0.7f)
+            ) {
+                Text(text = "Go to Detail (Nav Test)")
+            }
         }
     }
 }

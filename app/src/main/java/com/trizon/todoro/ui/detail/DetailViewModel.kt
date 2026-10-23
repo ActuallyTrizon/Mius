@@ -16,7 +16,6 @@ class DetailViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<DetailUiState>(DetailUiState.Loading)
     val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()
 
-    /** Single entry point for every user intent coming from [DetailScreen]. */
     fun onEvent(event: DetailEvent) {
         when (event) {
             is DetailEvent.LoadDetail -> _uiState.value = DetailUiState.Content(event.id)
