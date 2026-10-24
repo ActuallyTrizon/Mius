@@ -9,11 +9,6 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Single source of truth for example data. Bridges the remote [AppApi] and the
- * local [ExampleDao], and exposes results wrapped in [Resource] so callers
- * (use cases / view models) don't need to know about the underlying data source.
- */
 @Singleton
 class ExampleRepository @Inject constructor(
     private val appApi: AppApi,
