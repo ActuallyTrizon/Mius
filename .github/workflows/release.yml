@@ -9,6 +9,17 @@ on:
     branches: [ "main" ]
     paths-ignore:
       - '**/*.md'
+  workflow_dispatch:
+    inputs:
+      publish_after_build:
+        description: 'Do you want to run publish.yml after?'
+        required: true
+        type: boolean
+        default: false
+      tag_name:
+        description: 'Release Tag (Required)'
+        required: false
+        type: string
 
 jobs:
   build:
@@ -61,3 +72,31 @@ jobs:
         with:
           name: Release
           path: dist/*.apk
+
+  trigger-publish:
+    name: Trigger Publish Workflow
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.publish_after_build == 'true'
+    permissions:
+      actions: write
+      contents: read
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Validate Tag Name
+        run: |
+          TAG="${{ github.event.inputs.tag_name }}"
+          if [ -z "$TAG" ]; then
+            echo "Error: Tag name is required when publishing is enabled."
+            exit 1
+          fi
+          echo "Tag name is valid: $TAG"
+
+      - name: Trigger Publish
+        run: |
+          TAG="${{ github.event.inputs.tag_name }}"
+          echo "Triggering publish.yml for release with tag $TAG..."
+          gh workflow run publish.yml \
+            -f workflow_type=release \
+            -f tag_name="$TAG"
